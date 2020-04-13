@@ -35,8 +35,8 @@ int main(int argc, char * argv[]){
     int sizeSaved = Array_Save_To_File(argv[3],data,size);
 
 	printf(" Size loaded = %d and size saved = %d\n",size, sizeSaved);
-	
-	//printf("\n\n SORTED: \n");
+
+	// printf("\n\n SORTED: \n");
 
 	// for(int count = 0; count < size; count ++){
 	// 	printf("\n%ld", data[count]);
