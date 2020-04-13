@@ -1,8 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "sorting.h"
+#include <string.h>
 
 #define SMALL_NUM 30
+
+#define DEBUG 0
 
 //headers
 static int partition1(long *array, int lb, int ub);
@@ -194,37 +197,101 @@ static void insertion(long * array, int size){
 * START OF MERGE SORT STUFF
 *
 ***************************************/
-int findEnd(long * array, int size, int start);
-
+int findEndA(long * array, int size, int start);
+int findEndD(long * array, int size, int start);
+void merge(long * toMerge, long*, int lb, int mid, int ub);
 
 
 void Merge_Sort(long *Array, int Size){
     int runs;
     
-    long * tempArray = malloc(sizeof(long) * Size));
-    memcpy(tempArray, Array, )
+    long * tempArray = malloc(sizeof(long) * Size);
+
+    if(tempArray == NULL){
+        printf("\n MALLOC RETURNS NULL");
+        return;
+
+    }
+
+    memcpy(tempArray, Array, (sizeof(long) * Size));
+    long * swap = NULL;
+
+    long * origArray = Array;
+
+    //int deb = 2;
+
+    // #ifdef DEBUG
+    // printf("\nORIGINAL ARRAY");
+    // for(int c = 0; c < Size; c++){
+    //     printf("\nindex %d, value =%ld",c,Array[c]);
+    // }
+    // #endif
+
     do{
         runs = 0;
-
+        //printf("\n big while\n");
         int i = 0;
-        while(i = 0){
+
+        while(i < Size){
+            //printf("\n i= %d", i);
             runs++;
             
             //end of left non descending array
-            int endLeft = findEnd(array,Size, i);
+            int endLeft = findEndA(tempArray,Size, i);
+            //printf("\nendleft = %d", endLeft);
 
             //check if there is a right subarray 
-            if(endLeft + 1 < size){
-                int endRight = findEnd(Array,size,endLeft + 1);
-                merge(array, tempArray, i,endLeft, endRight);
+            if(endLeft + 1 < Size){
+                int endRight = findEndA(tempArray,Size,endLeft + 1); //right one is descending 
+                //printf("\nendright = %d", endRight);
+                merge(tempArray, Array, i, endLeft, endRight);
+
+                // #ifdef DEBUG
+                // printf("\nintermediate array");
+                // for(int c = 0; c < Size; c++){
+                //     printf("\nindex %d, value =%ld",c,Array[c]);
+                // }
+                // #endif
+
                 i = endRight + 1; //index of next left sub array
+ 
+            } else if(endLeft == Size - 1) {
+                merge(tempArray, Array, i, i, endLeft);
+                i++;
             }
+
             else{
                 break;
             }
         }
+        //swaps them so that the roles are flipped on the next run
+        swap = Array;
+        Array = tempArray;
+        tempArray = swap;
+    
+    
 
     }while(runs > 1);
+
+    if(tempArray != origArray){
+        memcpy(origArray, tempArray, sizeof(long) * Size);
+        free(tempArray);
+    }
+    else{
+        free(Array);
+    }
+    
+    
+    // #ifdef DEBUG
+    // printf("\nNEW ARRAY");
+    // for(int c = 0; c < Size; c++){
+    //     printf("\nindex %d, value =%ld",c,origArray[c]);
+    // }
+    // #endif
+
+    
+    
+
 }
 /****************************************
 * NAME: findEnd
@@ -234,7 +301,7 @@ void Merge_Sort(long *Array, int Size){
 * elements 
 *
 ***************************************/
-int findEnd(long * array, int size, int start){
+int findEndA(long * array, int size, int start){
 
     int end = start;
     while(((end + 1) < size) && array[end] <= array[end+ 1]){ 
@@ -246,14 +313,72 @@ int findEnd(long * array, int size, int start){
 }
 
 /****************************************
+* NAME: findEndD
+* PARAMETERS: long * array, int size, int start
+* RETURN: int end
+* DESCRIPTION: runs through the array to find descending
+* elements 
+*
+***************************************/
+int findEndD(long * array, int size, int start){
+
+    int end = start;
+    while(((end + 1) < size) && array[end] >= array[end+ 1]){ 
+        end++; //increments the index while the next value is less than the previous
+
+    }
+
+    return end;
+}
+
+/****************************************
 * NAME: merge
 * PARAMETERS: long * array, long * temp, int size, int start
 * RETURN: void 
 * DESCRIPTION: merges the temp into the array
+* The right subarray shoudl be sorted in descending order
+* this eliminates the need to have many comparisons
+* Also prevents the merge from going out of bounds
 *
 ***************************************/
 
-void(long * array, long * toMerge, int lb, int mid, int ub){
+// void merge(long * toMerge, long * getMerged, int lb, int mid, int ub){
+//     int getMerInd = 0; //index of the array where values are being placed
+//     int i = lb; //index of left sub array
+//     int j = ub; //index of right sub array going in reverse
 
 
+//     for(getMerInd = 0; getMerInd < ub - lb + 1; getMerInd++ ){ //merge from toMerge to getMerged
+//     //the bounds might not need the +1
+//     if(toMerge[i] <= toMerge[j]){
+//         getMerged[getMerInd] = toMerge[i++];
+//     }
+//     else{
+//         getMerged[getMerInd] = toMerge[j--];
+//     }
+        
+//     }
+
+// }
+void merge(long * toMerge, long * getMerged, int lb, int mid, int ub){
+    //printf("\n\nMERGING WITH lb = %d mid = %d and ub = %d\n", lb,mid,ub);
+    
+    int m; //index of getMerged
+    int i = lb;
+    int j = mid + 1;
+
+    for ( m = lb ; m <= ub ; m ++) { // merge from tmp to r
+        if ( i > mid) { 
+            getMerged[ m ] = toMerge [ j++]; 
+        }
+        else if (j > ub ) { 
+            getMerged[ m ] = toMerge[ i ++]; 
+        }
+        else if ( toMerge [ j ] < toMerge [i ]) { 
+            getMerged[ m ] = toMerge[j ++]; 
+        }
+        else {
+            getMerged[m ] = toMerge [ i ++]; 
+        }
+    }
 }

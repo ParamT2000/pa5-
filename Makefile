@@ -1,6 +1,7 @@
+
 WARNING = -Wall -Wshadow --pedantic
-ERROR = -Wvla -Werror
-GCC = gcc -std=c99 -O3 $(WARNING) $(ERROR) #change back to -g for debugging
+ERROR = -Wvla 
+GCC = gcc -std=c99 -g $(WARNING) $(ERROR)  #change back to -g for debugging
 #VAL = valgrind --tool=memcheck --log-file=memcheck.txt --leak-check=full --verbose
 
 
@@ -19,23 +20,46 @@ clean: # remove all machine generated files
 	rm -f pa5 *.o output?
 
 testQ1M:
-	./generate 1000000 1M.b
 	./quick 1M.b correct.b
 	time ./pa5 -q 1M.b out1M.b
 	diff out1M.b correct.b
 
+
 testQ4M:
-	./generate 4000000 4M.b
 	./quick 4M.b correct.b
 	time ./pa5 -q 4M.b out4M.b
 	diff out4M.b correct.b
 
+testM10:
+	#./quick 10.b correct.b
+	./pa5 -q 10.b correct.b
+	time ./pa5 -m 10.b out10.b
+	diff out10.b correct.b 
 
+testM1M:
+	#./quick 10.b correct.b
+	./pa5 -q 1M.b correct.b
+	time ./pa5 -m 1M.b out1M.b
+	diff out1M.b correct.b 
+
+testM2M: 
+	./pa5 -q 2M.b correct.b
+	./pa5 -m 2M.b out2M.b
+	diff out2M.b correct.b 
+
+#memory checking stuff
 memCheckQ: pa5
 	valgrind --leak-check=full \
 	--show-leak-kinds=all \
 	--track-origins=yes \
 	--verbose \
 	./pa5 -q 1M.b out1M.b
+
+memCheckM: pa5
+	valgrind --leak-check=full \
+	--show-leak-kinds=all \
+	--track-origins=yes \
+	--verbose \
+	./pa5 -m 2M.b out2M.b
 
 
