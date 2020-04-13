@@ -198,9 +198,7 @@ static void insertion(long * array, int size){
 * START OF MERGE SORT STUFF
 *
 ***************************************/
-int findEndA(long * array, int size, int start);
-int findEndD(long * array, int size, int start);
-void merge(long * toMerge, long*, int lb, int mid, int ub);
+
 void newMergeA(long * toMerge, long * getMerged, int lb, int ub);
 void newMergeD(long * toMerge, long * getMerged, int lb, int ub);
 long * mergeSortRec(long* toMerge, long * getMerged, int lb, int ub, bool dir);
@@ -279,45 +277,6 @@ long * mergeSortRec(long* toMerge, long * getMerged, int lb, int ub, bool dir){
 
 }
 
-
-
-/****************************************
-* NAME: findEnd
-* PARAMETERS: long * array, int size, int start
-* RETURN: int end
-* DESCRIPTION: runs through the array to find ascending
-* elements 
-*
-***************************************/
-int findEndA(long * array, int size, int start){
-
-    int end = start;
-    while(((end + 1) < size) && array[end] <= array[end+ 1]){ 
-        end++; //increments the index while the next value is greater than the previous
-
-    }
-
-    return end;
-}
-
-/****************************************
-* NAME: findEndD
-* PARAMETERS: long * array, int size, int start
-* RETURN: int end
-* DESCRIPTION: runs through the array to find descending
-* elements 
-*
-***************************************/
-int findEndD(long * array, int size, int start){
-
-    int end = start;
-    while(((end + 1) < size) && array[end] >= array[end+ 1]){ 
-        end++; //increments the index while the next value is less than the previous
-
-    }
-
-    return end;
-}
 
 
 /***************************************
@@ -409,37 +368,6 @@ void newMergeD(long * toMerge, long * getMerged, int lb, int ub){
         
     
 }
-/****************************************
-* NAME: merge
-* PARAMETERS: long * array, long * temp, int size, int start
-* RETURN: void 
-* DESCRIPTION: merges the temp into the array
-* 
-*
-***************************************/
-void merge(long * toMerge, long * getMerged, int lb, int mid, int ub){
-    //printf("\n\nMERGING WITH lb = %d mid = %d and ub = %d\n", lb,mid,ub);
-    
-    int m = lb; //index of getMerged
-    int i = lb;
-    int j = mid + 1;
-
-    while((i <= mid) && (j <= ub)){
-        if ( toMerge [j] < toMerge [i]) { 
-            getMerged[m++] = toMerge[j++]; 
-        }
-        else {
-            getMerged[m++] = toMerge [i++]; 
-        }
-    }
-    while(i++ <= mid){
-        getMerged[m++] = toMerge [i++];
-    }
-    while(j++ <= ub){
-        getMerged[m++] = toMerge[i++];
-    }
-
-}
 
 
 /************************
@@ -447,6 +375,10 @@ void merge(long * toMerge, long * getMerged, int lb, int mid, int ub){
 *
 *
 *************************/
+
+// int findEndA(long * array, int size, int start);
+// int findEndD(long * array, int size, int start);
+// void merge(long * toMerge, long*, int lb, int mid, int ub);
 
 //void Merge_Sort(long *Array, int Size){
 //     int runs;
@@ -535,7 +467,76 @@ void merge(long * toMerge, long * getMerged, int lb, int mid, int ub){
 //     // }
 //     // #endif
 
+// }
+
+
+// /****************************************
+// * NAME: findEnd
+// * PARAMETERS: long * array, int size, int start
+// * RETURN: int end
+// * DESCRIPTION: runs through the array to find ascending
+// * elements 
+// *
+// ***************************************/
+// int findEndA(long * array, int size, int start){
+
+//     int end = start;
+//     while(((end + 1) < size) && array[end] <= array[end+ 1]){ 
+//         end++; //increments the index while the next value is greater than the previous
+
+//     }
+
+//     return end;
+// }
+
+// /****************************************
+// * NAME: findEndD
+// * PARAMETERS: long * array, int size, int start
+// * RETURN: int end
+// * DESCRIPTION: runs through the array to find descending
+// * elements 
+// *
+// ***************************************/
+// int findEndD(long * array, int size, int start){
+
+//     int end = start;
+//     while(((end + 1) < size) && array[end] >= array[end+ 1]){ 
+//         end++; //increments the index while the next value is less than the previous
+
+//     }
+
+//     return end;
+// }
+
+/****************************************
+// * NAME: merge
+// * PARAMETERS: long * array, long * temp, int size, int start
+// * RETURN: void 
+// * DESCRIPTION: merges the temp into the array
+// * 
+// *
+// ***************************************/
+// void merge(long * toMerge, long * getMerged, int lb, int mid, int ub){
+//     //printf("\n\nMERGING WITH lb = %d mid = %d and ub = %d\n", lb,mid,ub);
     
-    
+//     int m = lb; //index of getMerged
+//     int i = lb;
+//     int j = mid + 1;
+
+//     while((i <= mid) && (j <= ub)){
+//         if ( toMerge [j] < toMerge [i]) { 
+//             getMerged[m++] = toMerge[j++]; 
+//         }
+//         else {
+//             getMerged[m++] = toMerge [i++]; 
+//         }
+//     }
+//     while(i++ <= mid){
+//         getMerged[m++] = toMerge [i++];
+//     }
+//     while(j++ <= ub){
+//         getMerged[m++] = toMerge[i++];
+//     }
 
 // }
+

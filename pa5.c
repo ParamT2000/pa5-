@@ -86,7 +86,7 @@ long *Array_Load_From_File(char *filename, int *size){
 
 int Array_Save_To_File(char *filename, long *array, int size){
 	
-	FILE * output = fopen(filename, "w");
+	FILE * output = fopen(filename, "wb");
 	int val = fwrite(array, sizeof(long), size, output);
 	fclose(output);
 	return val;
